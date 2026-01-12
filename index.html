@@ -1,0 +1,228 @@
+<index.html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NonnaPunk | Cheesecakes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ESTILOS (El diseño visual) */
+        :root {
+            --color-fondo: #F9F7F2; /* Crema suave (Casero) */
+            --color-texto: #2C2C2C; /* Negro suave */
+            --color-acento: #FF4757; /* Rojo Vibrante (Atrevido/Punk) */
+            --color-secundario: #ECCC68; /* Dorado suave */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif; /* Fuente elegante para títulos */
+        }
+
+        /* Cabecera */
+        header {
+            background-color: #fff;
+            padding: 10px 20px; /* Reducido el padding para ajustar la imagen */
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex; /* Para alinear verticalmente la imagen */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            text-decoration: none;
+        }
+
+        /* Estilo nuevo para la imagen del logo */
+        .logo-img {
+            height: 150px; /* Ajusta la altura según necesites */
+            width: auto;
+            display: block;
+        }
+
+        /* Hero (Sección Principal) */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); /* Foto de fondo genérica */
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .btn-cta {
+            background-color: var(--color-acento);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05); /* Efecto zoom al pasar el ratón */
+            background-color: #ff2e40;
+        }
+
+        /* Sección de Productos */
+        .menu-section {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card-producto {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card-producto:hover {
+            transform: translateY(-5px);
+        }
+
+        .img-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #ddd;
+            object-fit: cover;
+        }
+
+        .info-producto {
+            padding: 20px;
+        }
+
+        .precio {
+            color: var(--color-acento);
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: block;
+            margin: 10px 0;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366; /* Verde WhatsApp */
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: block;
+            font-weight: bold;
+        }
+
+        /* Historia */
+        .historia {
+            background-color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2C2C2C;
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <img src="logo.png" alt="Logo NonnaPunk" class="logo-img">
+        </a>
+    </header>
+
+    <section class="hero">
+        <h1>Tradición Rebelde</h1>
+        <p>Cheesecakes con la receta de la abuela y un toque que no te esperas.</p>
+        <a href="#menu" class="btn-cta">VER EL MENÚ</a>
+    </section>
+
+    <section class="historia">
+        <h2>El concepto</h2>
+        <p>¿Qué pasa cuando mezclas el cuaderno de recetas de 1950 con los antojos modernos? Nace NonnaPunk. Horneamos cada mañana con huevos de granja y quesos cremosos, pero añadimos ingredientes que rompen las reglas.</p>
+    </section>
+
+    <section id="menu" class="menu-section">
+        <h2>Nuestros Favoritos</h2>
+        <p>Edición Limitada de esta semana</p>
+
+        <div class="grid-productos">
+            
+            <article class="card-producto">
+                <img src="frutos.jpg" alt="Cheesecake Clásica" class="img-placeholder">
+                <div class="info-producto">
+                    <h3>La Clásica de la Nonna</h3>
+                    <p>Cremosa, suave y con coulis de frutos rojos silvestres. El sabor de siempre, perfeccionado.</p>
+                    <span class="precio">25.00€</span>
+                    <a href="https://wa.me/34600000000?text=Hola!%20Quiero%20pedir%20la%20Tarta%20Clásica" target="_blank" class="btn-whatsapp">PEDIR POR WHATSAPP</a>
+                </div>
+            </article>
+
+            <article class="card-producto">
+                <img src="tartaoreo.jpg" alt="Cheesecake OREO BLANCO" class="img-placeholder">
+                <div class="info-producto">
+                    <h3>OREO BLANCO</h3>
+                    <p>Nuestra estrella viral. Topping de bacon caramelizado crujiente y jarabe de arce auténtico.</p>
+                    <span class="precio">28.00€</span>
+                    <a href="https://wa.me/34600000000?text=Hola!%20Me%20atrevo%20con%20la%20Tarta%20Bacon" target="_blank" class="btn-whatsapp">PEDIR POR WHATSAPP</a>
+                </div>
+            </article>
+
+            <article class="card-producto">
+                <img src="pistacho.png" alt="Cheesecake Gin Tonic" class="img-placeholder">
+                <div class="info-producto">
+                    <h3>Pistacho y chocolate blanco y azafran</h3>
+                    <p>Infusión de enebro, gelatina de gin y ralladura de lima. Fresca, adulta y sofisticada.</p>
+                    <span class="precio">28.00€</span>
+                    <a href="https://wa.me/34600000000?text=Hola!%20Quiero%20la%20Tarta%20Gin%20Tonic" target="_blank" class="btn-whatsapp">PEDIR POR WHATSAPP</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 NonnaPunk Cheesecakes. Proyecto creado con IA.</p>
+        <p>Pedidos con 24h de antelación.</p>
+    </footer>
+
+</body>
+</html>
