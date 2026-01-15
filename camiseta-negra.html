@@ -1,0 +1,150 @@
+<camiseta-negra.html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Shirt Team Nonna - Detalles | NonnaPunk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Mismos estilos de marca */
+        :root {
+            --color-fondo: #F9F7F2;
+            --color-texto: #2C2C2C;
+            --color-acento: #FF4757;
+            --color-secundario: #ECCC68;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn-volver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: var(--color-texto);
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .container-detalle {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .foto-detalle {
+            flex: 1 1 400px;
+        }
+
+        .foto-detalle img {
+            width: 100%;
+            border-radius: 15px;
+            /* Sombra gris oscura */
+            box-shadow: 5px 5px 0px #333; 
+        }
+
+        .texto-detalle {
+            flex: 1 1 400px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--color-texto);
+        }
+
+        .precio-grande {
+            font-size: 2rem;
+            color: var(--color-acento);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .detalles-box {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-left: 4px solid #333; /* Borde negro */
+            margin: 20px 0;
+        }
+
+        .btn-pedir {
+            display: inline-block;
+            background-color: var(--color-acento);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn-pedir:hover {
+            transform: scale(1.05);
+            background-color: #ff2e40;
+        }
+
+        @media (max-width: 768px) {
+            .container-detalle {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="btn-volver">← Volver al Menú</a>
+
+    <div class="container-detalle">
+        
+        <div class="foto-detalle">
+            <img src="camisetanegra.png" alt="Camiseta NonnaPunk">
+        </div>
+
+        <div class="texto-detalle">
+            <h1>T-Shirt "Team Nonna"</h1>
+            <span class="precio-grande">10.00€</span>
+            
+            <p>El uniforme oficial del caos. Una camiseta pensada para resistir jornadas de horneado intenso o noches de concierto.</p>
+            
+            <p>Color negro lavado a la piedra (para que no parezca nueva, porque eso no es punk). El corte es ligeramente <em>oversize</em>, así que queda holgada y cómoda.</p>
+
+            <div class="detalles-box">
+                <strong>🧵 Ficha Técnica:</strong><br>
+                <ul>
+                    <li>100% Algodón Orgánico (suave pero resistente).</li>
+                    <li>Serigrafía artesanal de alta calidad.</li>
+                    <li>Corte Unisex Oversize.</li>
+                    <li>Etiqueta bordada en la manga.</li>
+                </ul>
+            </div>
+
+            <p><em>*Cuidados: Lavar en frío y del revés para que dure toda la gira.</em></p>
+
+            <a href="https://forms.gle/kLkpkXG1CSrLwUPK7" target="_blank" class="btn-pedir">ELEGIR TALLA</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
