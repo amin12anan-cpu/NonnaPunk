@@ -1,0 +1,166 @@
+<tarta-caramelo.html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caramelo y Pretzels - Detalles | NonnaPunk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Mismos estilos de marca */
+        :root {
+            --color-fondo: #F9F7F2;
+            --color-texto: #2C2C2C;
+            --color-acento: #FF4757;
+            --color-secundario: #ECCC68;
+            --color-craft: #cd853f; /* Color marrón para detalles */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn-volver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: var(--color-texto);
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10; /* Para que esté por encima */
+        }
+
+        .container-detalle {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .foto-detalle {
+            flex: 1 1 400px;
+        }
+
+        .foto-detalle img {
+            width: 100%;
+            border-radius: 15px;
+            /* Sombra color "Craft" / Cartón como en el ejemplo */
+            box-shadow: 5px 5px 0px var(--color-craft); 
+        }
+
+        .texto-detalle {
+            flex: 1 1 400px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--color-texto);
+        }
+
+        .precio-grande {
+            font-size: 2rem;
+            color: var(--color-acento);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .detalles-box {
+            background-color: #fcf8f2;
+            padding: 15px;
+            border-left: 4px solid var(--color-craft); /* Borde marrón */
+            margin: 20px 0;
+        }
+
+        .detalles-box ul {
+            margin: 10px 0 0 0; /* Quitar margen superior */
+            padding-left: 25px;
+        }
+        
+        .detalles-box li {
+            margin-bottom: 5px;
+        }
+
+        .btn-pedir {
+            display: inline-block;
+            background-color: var(--color-acento);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn-pedir:hover {
+            transform: scale(1.05);
+            background-color: #ff2e40;
+        }
+
+        @media (max-width: 768px) {
+            .container-detalle {
+                margin: 20px;
+                padding: 20px;
+            }
+            .btn-volver {
+                position: static;
+                display: inline-block;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html#menu" class="btn-volver">← Volver al Menú</a>
+
+    <div class="container-detalle">
+        
+        <div class="foto-detalle">
+            <img src="caramelo.png" alt="Cheesecake Caramelo Salado y Pretzels">
+        </div>
+
+        <div class="texto-detalle">
+            <h1>Caramelo Salado & Pretzels</h1>
+            <span class="precio-grande">28.00€</span>
+            
+            <p>Olvídate del equilibrio. Esto es una declaración de guerra al aburrimiento en forma de tarta.</p>
+            
+            <p>Hemos cogido la receta de la Nonna y la hemos lanzado a un pogo de caramelo y sal. Base crujiente e insolente de pretzels, relleno cremoso infusionado y una cobertura chorreante que es una experiencia religiosa.</p>
+
+            <div class="detalles-box">
+                <strong>🍰 Ficha Técnica del Caos:</strong><br>
+                <ul>
+                    <li><strong>Base:</strong> Pretzels machacados sin piedad con mantequilla tostada.</li>
+                    <li><strong>Relleno:</strong> Queso crema con remolinos de nuestro caramelo salado casero.</li>
+                    <li><strong>Cobertura:</strong> Toffee chorreante, más pretzels crujientes y escamas de sal maldita.</li>
+                    <li><strong>Formato:</strong> Tarta entera, aprox. 8-10 porciones.</li>
+                </ul>
+            </div>
+
+            <p><em>*Peligrosamente adictiva. Pruébala antes de que la prohíban.</em></p>
+
+            <a href="https://forms.gle/kLkpkXG1CSrLwUPK7" target="_blank" class="btn-pedir">QUIERO ESTA TARTA</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
