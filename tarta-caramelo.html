@@ -4,132 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caramelo y Pretzels - Detalles | NonnaPunk</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     
+    <script src="https://js.stripe.com/v3/"></script>
+    
     <style>
-        /* Mismos estilos de marca */
+        /* --- ESTILOS VISUALES (TU MARCA) --- */
         :root {
             --color-fondo: #F9F7F2;
             --color-texto: #2C2C2C;
             --color-acento: #FF4757;
             --color-secundario: #ECCC68;
-            --color-craft: #cd853f; /* Color marrón para detalles */
+            --color-craft: #cd853f;
+            --color-negro: #1a1a1a;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--color-fondo);
             color: var(--color-texto);
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
         }
 
+        /* Botón Volver */
         .btn-volver {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: var(--color-texto);
-            font-weight: bold;
-            font-size: 1.2rem;
+            position: absolute; top: 20px; left: 20px;
+            text-decoration: none; color: var(--color-texto);
+            font-weight: bold; font-size: 1.2rem;
             background: rgba(255,255,255,0.8);
-            padding: 5px 10px;
-            border-radius: 5px;
-            z-index: 10; /* Para que esté por encima */
+            padding: 5px 10px; border-radius: 5px; z-index: 10;
         }
 
+        /* Contenedor Principal */
         .container-detalle {
-            max-width: 900px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
+            max-width: 900px; margin: 50px auto;
+            background: white; padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
+            display: flex; flex-wrap: wrap; gap: 40px;
             align-items: center;
         }
 
-        .foto-detalle {
-            flex: 1 1 400px;
-        }
-
+        .foto-detalle { flex: 1 1 400px; }
         .foto-detalle img {
-            width: 100%;
-            border-radius: 15px;
-            /* Sombra color "Craft" / Cartón como en el ejemplo */
+            width: 100%; border-radius: 15px;
             box-shadow: 5px 5px 0px var(--color-craft); 
         }
 
-        .texto-detalle {
-            flex: 1 1 400px;
-        }
+        .texto-detalle { flex: 1 1 400px; }
 
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--color-texto);
+            font-size: 2.5rem; margin-bottom: 10px; color: var(--color-texto);
         }
 
         .precio-grande {
-            font-size: 2rem;
-            color: var(--color-acento);
-            font-weight: bold;
-            display: block;
-            margin-bottom: 20px;
+            font-size: 2rem; color: var(--color-acento);
+            font-weight: bold; display: block; margin-bottom: 20px;
         }
 
         .detalles-box {
-            background-color: #fcf8f2;
-            padding: 15px;
-            border-left: 4px solid var(--color-craft); /* Borde marrón */
+            background-color: #fcf8f2; padding: 15px;
+            border-left: 4px solid var(--color-craft);
             margin: 20px 0;
         }
+        .detalles-box ul { margin: 10px 0 0 0; padding-left: 25px; }
+        .detalles-box li { margin-bottom: 5px; }
 
-        .detalles-box ul {
-            margin: 10px 0 0 0; /* Quitar margen superior */
-            padding-left: 25px;
-        }
-        
-        .detalles-box li {
-            margin-bottom: 5px;
-        }
-
+        /* Botón Pedir (Ahora añade al carrito) */
         .btn-pedir {
             display: inline-block;
             background-color: var(--color-acento);
-            color: white;
-            padding: 15px 40px;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 50px;
-            margin-top: 20px;
-            transition: transform 0.2s;
+            color: white; padding: 15px 40px;
+            text-decoration: none; font-weight: bold;
+            border-radius: 50px; margin-top: 20px;
+            transition: transform 0.2s; border: none; cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-pedir:hover { transform: scale(1.05); background-color: #ff2e40; }
+
+        /* --- ESTILOS DEL SISTEMA DE CARRITO (AÑADIDOS) --- */
+        
+        .cart-float-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--color-acento); color: white;
+            width: 70px; height: 70px; border-radius: 50%;
+            border: none; font-size: 30px; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 999;
+            transition: transform 0.3s;
+        }
+        .cart-float-btn:hover { transform: scale(1.1); }
+        .cart-count {
+            position: absolute; top: -5px; right: -5px;
+            background: var(--color-secundario); color: black;
+            font-size: 14px; font-weight: bold; width: 25px; height: 25px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
         }
 
-        .btn-pedir:hover {
-            transform: scale(1.05);
-            background-color: #ff2e40;
+        /* Modales */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+            z-index: 2000; align-items: center; justify-content: center;
         }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 20px;
+            width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: none; border: none; font-size: 24px; cursor: pointer;
+        }
+        
+        /* Formulario y Checkout */
+        .cart-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: 'Montserrat'; }
+        #card-element { padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fcfcfc; }
+        
+        .success-box {
+            background: #d4edda; color: #155724; padding: 20px; 
+            border-radius: 10px; text-align: center; display: none;
+        }
+
+        .btn-pagar {
+             background-color: var(--color-negro);
+             color: white; width: 100%; padding: 12px; border: none;
+             border-radius: 5px; font-weight: bold; margin-top: 15px; cursor: pointer;
+        }
+        .btn-pagar:hover { background-color: var(--color-acento); }
 
         @media (max-width: 768px) {
-            .container-detalle {
-                margin: 20px;
-                padding: 20px;
-            }
-            .btn-volver {
-                position: static;
-                display: inline-block;
-                margin: 20px;
-            }
+            .container-detalle { margin: 20px; padding: 20px; }
+            .btn-volver { position: static; display: inline-block; margin: 20px; }
         }
     </style>
 </head>
 <body>
 
     <a href="index.html#menu" class="btn-volver">← Volver al Menú</a>
+
+    <button class="cart-float-btn" onclick="toggleCart()">
+        🛒 <span class="cart-count" id="cartCount">0</span>
+    </button>
 
     <div class="container-detalle">
         
@@ -157,10 +177,156 @@
 
             <p><em>*Peligrosamente adictiva. Pruébala antes de que la prohíban.</em></p>
 
-            <a href="https://forms.gle/kLkpkXG1CSrLwUPK7" target="_blank" class="btn-pedir">QUIERO ESTA TARTA</a>
+            <button class="btn-pedir" onclick="addToCart('Salty Caramel', 28.00)">AÑADIR A LA CESTA +</button>
         </div>
 
     </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="toggleCart()">×</button>
+            <h2>Tu Pedido 🤘</h2>
+            <div id="cartItemsContainer">
+                <p>Tu carrito está vacío.</p>
+            </div>
+            <h3 style="text-align: right; margin-top: 20px;">Total: <span id="cartTotal">0.00</span>€</h3>
+            <button class="btn-pedir" style="width: 100%; margin-top: 20px;" onclick="openCheckout()">PAGAR AHORA</button>
+        </div>
+    </div>
+
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCheckout()">×</button>
+            
+            <div id="paymentFormSection">
+                <h2>Finalizar Compra</h2>
+                <p>Total a pagar: <strong id="checkoutTotal">0.00€</strong></p>
+                <br>
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="name" required placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" required placeholder="hola@ejemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Datos de Tarjeta (Stripe Seguro)</label>
+                        <div id="card-element"></div>
+                    </div>
+                    <button type="submit" class="btn-pagar" id="payBtn">
+                        CONFIRMAR PAGO
+                    </button>
+                </form>
+            </div>
+
+            <div id="successMessage" class="success-box">
+                <h3>✅ ¡Pago Realizado!</h3>
+                <p>Tu pedido #NP2025 está confirmado.</p>
+                <p>Te enviaremos el recibo a tu email.</p>
+                <button class="btn-pagar" style="margin-top:15px; background-color:#25D366;" onclick="window.location.href='index.html'">Volver al Inicio</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. CONFIGURACIÓN STRIPE
+        const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); 
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        
+        // 2. LÓGICA DEL CARRITO (Con LocalStorage para persistencia)
+        let cart = JSON.parse(localStorage.getItem('nonnaPunkCart')) || [];
+        updateCartUI(); // Cargar estado inicial al abrir la página
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            saveCart();
+            updateCartUI();
+            
+            // Animación del botón flotante
+            const floatBtn = document.querySelector('.cart-float-btn');
+            floatBtn.style.transform = "scale(1.3)";
+            setTimeout(() => floatBtn.style.transform = "scale(1)", 200);
+            
+            // Abrir carrito automáticamente para confirmar
+            toggleCart();
+        }
+
+        function saveCart() {
+            localStorage.setItem('nonnaPunkCart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCount').innerText = cart.length;
+
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('cartTotal').innerText = total.toFixed(2);
+            document.getElementById('checkoutTotal').innerText = total.toFixed(2) + '€';
+
+            let container = document.getElementById('cartItemsContainer');
+            if(cart.length === 0) {
+                container.innerHTML = "<p>Tu carrito está vacío.</p>";
+            } else {
+                container.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>${item.price.toFixed(2)}€ <button onclick="removeFromCart(${index})" style="color:red;border:none;background:none;cursor:pointer;font-weight:bold;margin-left:5px;">X</button></span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart(); // Guardar cambios
+            updateCartUI();
+        }
+
+        // 3. CONTROL DE VENTANAS (MODALES)
+        function toggleCart() {
+            document.getElementById('cartModal').classList.toggle('active');
+        }
+
+        function openCheckout() {
+            if(cart.length === 0) {
+                alert("¡Añade algo rico primero!");
+                return;
+            }
+            toggleCart(); 
+            document.getElementById('checkoutModal').classList.add('active'); 
+            
+            if(document.getElementById('card-element').innerHTML === "") {
+                cardElement.mount('#card-element');
+            }
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // 4. SIMULACIÓN DE PAGO
+        const form = document.getElementById('payment-form');
+        
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerText = "Conectando con el banco...";
+
+            setTimeout(() => {
+                document.getElementById('paymentFormSection').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Limpiar carrito y memoria al comprar
+                cart = [];
+                saveCart();
+                updateCartUI();
+            }, 2000);
+        });
+    </script>
 
 </body>
 </html>
