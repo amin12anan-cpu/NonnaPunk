@@ -1,0 +1,11 @@
+{
+  "name": "nonnapunk",
+  "version": "1.0.0",
+  "description": "NonnaPunk Cheesecakes Store",
+  "main": "index.html",
+  "dependencies": {
+    "stripe": "^14.25.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
