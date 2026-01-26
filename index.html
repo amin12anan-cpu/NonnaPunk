@@ -323,8 +323,8 @@
                 <div class="info-producto">
                     <a href="bolsa.html" class="card-link"><h3>Tote "Punk Carrier"</h3></a>
                     <p>Resistente para libros o tartas.</p>
-                    <span class="precio">3.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Tote Bag', 3.00)">AÑADIR 🛒</button>
+                    <span class="precio">0.50€</span>
+                    <button class="btn-add-cart" onclick="addToCart('Tote Bag', 0.50)">AÑADIR 🛒</button>
                 </div>
             </article>
 
@@ -455,7 +455,7 @@
         // ==========================================
         const CONFIG = {
             // Pon aquí tu clave pública de Stripe (pk_test_...)
-            STRIPE_KEY: 'pk_test_51SqafBPfC2lL6XQld47q2pIqeZNRTVo2AH7OPDhOwn67Wb5rRH4iejHkTtbfflnmmVwLUJvfJyp9OXaXwqAIfnB200I6jqATf3', 
+            STRIPE_KEY: 'pk_live_51SqaesBT1JSEOM4ricBfF8jeXPuZsrJoI5viv9OvXH57GOPw57WR5K5jc1WmkxVr9K54FV2yQxccQozNenm0Xqa900TksIah37', 
             // Pon aquí tu URL de Zapier
             ZAPIER_URL: 'https://hooks.zapier.com/hooks/catch/25982070/ugpz72v/' 
         };
@@ -569,47 +569,64 @@
         }
 
         document.getElementById('payment-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-button');
-            const spinner = document.getElementById('spinner');
-            const txt = document.getElementById('button-text');
-            
-            btn.disabled = true; txt.style.display = 'none'; spinner.style.display = 'inline-block';
+    e.preventDefault();
+    const btn = document.getElementById('submit-button');
+    const spinner = document.getElementById('spinner');
+    const txt = document.getElementById('button-text');
+    
+    // Bloquear botón mientras piensa
+    btn.disabled = true; txt.style.display = 'none'; spinner.style.display = 'inline-block';
 
-            const data = {
-                nombre: document.getElementById('customer-name').value,
-                email: document.getElementById('customer-email').value,
-                telefono: document.getElementById('customer-phone').value,
-                fecha: document.getElementById('pickup-date').value,
-                notas: document.getElementById('customer-notes').value,
-                carrito: cart,
-                total: document.getElementById('cartTotal').innerText
-            };
+    // Calcular el total en CÉNTIMOS (Stripe lo exige así. 25.00€ = 2500)
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0) * 100;
 
-            try {
-                const {token, error} = await stripe.createToken(card);
-                if(error) throw new Error(error.message);
+    const data = {
+        nombre: document.getElementById('customer-name').value,
+        email: document.getElementById('customer-email').value,
+        telefono: document.getElementById('customer-phone').value,
+        fecha: document.getElementById('pickup-date').value,
+        notas: document.getElementById('customer-notes').value,
+        carrito: cart,
+        total: document.getElementById('cartTotal').innerText
+    };
 
-                await fetch(CONFIG.ZAPIER_URL, {
-                    method: 'POST', mode: 'no-cors',
-                    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
-                });
-
-                // Simular éxito
-                await new Promise(r => setTimeout(r, 1500));
-                
-                document.getElementById('checkoutContent').style.display = 'none';
-                document.getElementById('success-message').style.display = 'block';
-                document.getElementById('order-number').innerText = "NP-" + Math.floor(Math.random()*10000);
-                document.getElementById('confirm-email').innerText = data.email;
-                
-                cart = []; updateCartUI();
-
-            } catch(err) {
-                alert("Error: " + err.message);
-                btn.disabled = false; txt.style.display = 'inline'; spinner.style.display = 'none';
-            }
+    try {
+        // PASO 1: Pedir el "Secreto" a tu Backend (El puente)
+        const res = await fetch('/.netlify/functions/create-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: totalAmount })
         });
+        
+        const { clientSecret, error: backendError } = await res.json();
+        if (backendError) throw new Error(backendError);
+
+        // PASO 2: Stripe valida la tarjeta y abre el banco si es necesario (SCA)
+        const { paymentIntent, error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: { card: card }
+        });
+
+        if (stripeError) throw new Error(stripeError.message);
+
+        // PASO 3: ¡PAGO REAL COMPLETADO! Ahora sí, enviamos el pedido a Zapier
+        await fetch(CONFIG.ZAPIER_URL, {
+            method: 'POST', mode: 'no-cors', 
+            headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
+        });
+
+        // Mostrar éxito en pantalla
+        await new Promise(r => setTimeout(r, 1000));
+        document.getElementById('checkoutContent').style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+        document.getElementById('order-number').innerText = "NP-" + paymentIntent.id.slice(-6).toUpperCase();
+        document.getElementById('confirm-email').innerText = data.email;
+        cart = []; updateCartUI();
+
+    } catch(err) {
+        alert("Error en el pago: " + err.message);
+        btn.disabled = false; txt.style.display = 'inline'; spinner.style.display = 'none';
+    }
+});
 
         // --- 4. COOKIES ---
         window.addEventListener('load', () => {
