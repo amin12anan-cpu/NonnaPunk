@@ -1,26 +1,30 @@
-<index.html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NonnaPunk | Cheesecakes & Merch</title>
+    <title>NonnaPunk | Cheesecakes Artesanales & Merch</title>
+    <meta name="description" content="Cheesecakes artesanales con receta tradicional y un toque rebelde.">
     
     <script src="https://js.stripe.com/v3/"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- 1. VARIABLES & BASE --- */
         :root {
             --color-fondo: #F9F7F2;
             --color-texto: #2C2C2C;
-            --color-acento: #FF4757;
-            --color-secundario: #ECCC68;
+            --color-acento: #FF4757; /* Rojo Punk */
+            --color-acento-hover: #ff2e40;
+            --color-secundario: #ECCC68; /* Dorado */
             --color-negro-footer: #1a1a1a;
+            --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
-
+        
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--color-fondo);
@@ -30,79 +34,41 @@
 
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-        /* Header */
+        /* --- 2. HEADER & NAV --- */
         header {
             background-color: rgba(255, 255, 255, 0.98);
             padding: 15px 20px;
-            text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             position: sticky; top: 0; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center; max-width: 100%;
         }
-        .header-content { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .header-content {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+        }
         .logo-img { height: 60px; width: auto; }
         
-        nav { display: flex; gap: 20px; }
-        nav a { text-decoration: none; color: var(--color-texto); font-weight: 600; transition: 0.3s; }
+        nav { display: flex; align-items: center; gap: 20px; }
+        nav a {
+            text-decoration: none; color: var(--color-texto); font-weight: 600;
+            transition: color 0.3s;
+        }
         nav a:hover { color: var(--color-acento); }
 
-        /* Carrito flotante */
-        .cart-button {
-            position: fixed; bottom: 30px; right: 30px;
-            background: var(--color-acento); color: white;
-            width: 65px; height: 65px; border-radius: 50%; border: none;
-            font-size: 24px; cursor: pointer; box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5);
-            z-index: 999; transition: transform 0.3s;
-            display: flex; align-items: center; justify-content: center;
+        /* Estilo del Carrito en el Header */
+        .header-cart-link {
+            position: relative; font-size: 1.2rem; margin-left: 10px;
+            display: inline-flex; align-items: center; text-decoration: none !important;
         }
-        .cart-button:hover { transform: scale(1.1); }
-        .cart-count {
-            position: absolute; top: -5px; right: -5px;
-            background: var(--color-secundario); color: var(--color-texto);
-            width: 25px; height: 25px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: bold; border: 2px solid white;
+        .header-badge {
+            background-color: var(--color-acento); color: white;
+            font-size: 0.7rem; font-weight: bold; height: 18px; width: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            position: absolute; top: -8px; right: -8px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .bump { transform: scale(1.5); } /* Animación rebote */
 
-        /* Modales */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            z-index: 2000; align-items: center; justify-content: center;
-            animation: fadeIn 0.3s;
-        }
-        .modal.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .modal-content {
-            background: white; padding: 40px; border-radius: 20px;
-            max-width: 550px; width: 90%; max-height: 90vh; overflow-y: auto;
-            position: relative; animation: slideUp 0.3s; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .close-modal {
-            position: absolute; top: 20px; right: 20px; background: none; border: none;
-            font-size: 30px; cursor: pointer; color: #999; transition: 0.3s;
-        }
-        .close-modal:hover { color: var(--color-acento); }
-
-        /* Items del carrito */
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 0; border-bottom: 1px solid #eee;
-        }
-        .btn-remove {
-            background: rgba(255, 71, 87, 0.1); color: var(--color-acento); border: none;
-            padding: 5px 12px; border-radius: 6px; cursor: pointer; margin-left: 10px; font-weight: bold;
-        }
-        .cart-total {
-            font-size: 1.5rem; font-weight: bold; color: var(--color-texto);
-            margin: 25px 0; text-align: right; border-top: 2px solid #eee; padding-top: 15px;
-        }
-
-        /* Hero */
+        /* --- 3. HERO SECTION --- */
         .hero {
             text-align: center; padding: 120px 20px;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
@@ -112,98 +78,131 @@
         .hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
         .btn-cta {
-            background-color: var(--color-acento); color: white; padding: 18px 45px;
+            background-color: var(--color-acento); color: white; padding: 15px 40px;
             text-decoration: none; font-weight: bold; border-radius: 50px;
-            display: inline-block; margin-top: 30px; border: none; cursor: pointer;
-            font-size: 16px; transition: all 0.3s; box-shadow: 0 10px 30px rgba(255, 71, 87, 0.3);
+            display: inline-block; margin-top: 30px; transition: transform 0.3s;
         }
-        .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 71, 87, 0.5); background-color: #ff2e40; }
+        .btn-cta:hover { transform: translateY(-3px); background-color: var(--color-acento-hover); }
 
-        /* Sections */
-        .section-container { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
-        .section-title { text-align: center; margin-bottom: 50px; font-size: 2.5rem; }
+        /* --- 4. HISTORIA --- */
+        .story-box {
+            background: white; padding: 60px; border-radius: 20px; text-align: center;
+            max-width: 800px; margin: -50px auto 80px; position: relative; z-index: 10;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        /* --- 5. GRID PRODUCTOS --- */
+        .section-container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+        .section-title { text-align: center; margin-bottom: 40px; font-size: 2.5rem; }
         
-        .story-box { background: white; padding: 60px; border-radius: 20px; text-align: center; max-width: 800px; margin: -50px auto 80px; position: relative; z-index: 10; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-
         .grid-productos {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 35px;
         }
         .card-producto {
-            background: white; border-radius: 20px; overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s;
-            display: flex; flex-direction: column;
+            background: white; border-radius: 16px; overflow: hidden;
+            box-shadow: var(--shadow-soft); transition: transform 0.3s;
+            display: flex; flex-direction: column; text-align: left;
         }
-        .card-producto:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .card-producto:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
         
-        /* LINKS en tarjetas */
-        .card-producto a { text-decoration: none; color: inherit; display: block; }
+        /* Enlaces dentro de la tarjeta */
+        .card-link { text-decoration: none; color: inherit; display: block; }
         
         .img-placeholder { width: 100%; height: 260px; object-fit: cover; }
-        .info-producto { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
-        .info-producto h3 { margin-bottom: 10px; font-size: 1.3rem; transition: color 0.3s; }
+        .info-producto { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .info-producto h3 { font-size: 1.3rem; margin-bottom: 8px; transition: color 0.3s; }
         .card-producto:hover h3 { color: var(--color-acento); }
+        .info-producto p { font-size: 0.95rem; color: #666; flex-grow: 1; margin-bottom: 15px; }
+        .precio { font-size: 1.5rem; color: var(--color-acento); font-weight: bold; display: block; margin-bottom: 15px; }
         
-        .info-producto p { color: #666; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
-        .precio { color: var(--color-acento); font-weight: bold; font-size: 1.5rem; display: block; margin-bottom: 20px; }
-
         .btn-add-cart {
-            background: #222; color: white; border: none;
-            padding: 14px 25px; border-radius: 50px; cursor: pointer;
-            font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s;
+            background-color: #222; color: white; border: none; padding: 12px; width: 100%;
+            border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
         }
-        .btn-add-cart:hover { background: var(--color-acento); }
+        .btn-add-cart:hover { background-color: var(--color-acento); }
 
-        /* Merch Background */
-        .merch-section { background: white; border-radius: 30px; padding: 60px 20px; margin-top: 100px; }
+        /* Merch especial */
+        .merch-bg { background-color: white; border-radius: 20px; padding: 60px 20px; box-shadow: var(--shadow-soft); margin-top: 80px;}
+
+        /* --- 6. MODALES & CARRITO FLOTANTE --- */
+        #cart-float {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--color-acento); color: white;
+            width: 65px; height: 65px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 28px; cursor: pointer; z-index: 999;
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.5);
+            transition: transform 0.3s;
+        }
+        #cart-float:hover { transform: scale(1.1); }
+        #cart-count {
+            position: absolute; top: -5px; right: -5px;
+            background: var(--color-secundario); color: var(--color-texto);
+            font-size: 13px; font-weight: bold; width: 24px; height: 24px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            border: 2px solid white;
+        }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px); z-index: 2000;
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s;
+        }
+        .modal.active { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: white; padding: 40px; width: 95%; max-width: 550px;
+            border-radius: 20px; position: relative; max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: slideUp 0.3s;
+        }
+        @keyframes slideUp { from {transform: translateY(50px); opacity:0;} to {transform: translateY(0); opacity:1;} }
+
+        .close-modal {
+            position: absolute; top: 20px; right: 25px;
+            font-size: 28px; cursor: pointer; color: #999; border: none; background: none;
+        }
+        .close-modal:hover { color: var(--color-acento); }
+
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .btn-remove { background: rgba(255, 71, 87, 0.1); color: var(--color-acento); padding: 5px 10px; border-radius: 5px; cursor: pointer; border: none; margin-left: 10px; }
 
         /* Formulario Stripe */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 0.9rem; margin-bottom: 5px; font-weight: 600; }
         .form-group input, .form-group textarea {
-            width: 100%; padding: 12px; border: 2px solid #eee;
-            border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 16px;
-            transition: border 0.3s;
+            width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px;
+            font-family: 'Montserrat', sans-serif; font-size: 16px; outline: none; transition: 0.3s;
         }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--color-acento); outline: none; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--color-acento); }
         
-        #card-element { padding: 15px; border: 2px solid #eee; border-radius: 10px; background: white; }
-        #card-errors { color: #FF4757; margin-top: 10px; font-size: 14px; }
-        
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
-            border-top: 3px solid white; width: 24px; height: 24px;
-            animation: spin 1s linear infinite; display: inline-block; vertical-align: middle;
+        #card-element { padding: 15px; border: 2px solid #eee; border-radius: 8px; background: white; }
+        #card-errors { color: #FF4757; margin-top: 10px; font-size: 0.9rem; }
+
+        .btn-checkout-confirm {
+            background: var(--color-acento); color: white; width: 100%;
+            padding: 16px; border: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem;
+            margin-top: 20px; cursor: pointer; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2);
         }
+        .btn-checkout-confirm:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 71, 87, 0.3); }
+
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid white; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Footer */
-        footer {
-            background: var(--color-negro-footer); color: #ccc;
-            padding: 80px 20px 40px; margin-top: 100px;
-        }
-        .footer-content {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px; text-align: left;
-        }
-        .footer-col h3 { color: white; margin-bottom: 25px; font-size: 1.5rem; }
-        .footer-col p { margin-bottom: 15px; }
+        /* --- 7. FOOTER --- */
+        footer { background: var(--color-negro-footer); color: #ccc; padding: 80px 20px 40px; margin-top: 80px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: left; }
+        .footer-col h3 { color: white; margin-bottom: 20px; }
         .footer-col a { color: #ccc; text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
         .footer-col a:hover { color: var(--color-acento); }
         
         .social-icons { display: flex; gap: 15px; margin-top: 20px; }
-        .social-icon { 
-            width: 40px; height: 40px; background: rgba(255,255,255,0.1); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: white; text-decoration: none; transition: 0.3s;
-        }
+        .social-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: 0.3s; }
         .social-icon:hover { background: var(--color-acento); transform: translateY(-3px); }
 
-        .copyright {
-            margin-top: 60px; padding-top: 30px; border-top: 1px solid #333;
-            text-align: center; font-size: 0.9rem;
-        }
+        .copyright { margin-top: 60px; padding-top: 30px; border-top: 1px solid #333; text-align: center; font-size: 0.9rem; }
 
         @media (max-width: 768px) {
             .header-content { flex-direction: column; gap: 15px; }
@@ -215,86 +214,17 @@
 
     <header>
         <div class="header-content">
-            <a href="index.html"><img src="logo.png" alt="Logo NonnaPunk" class="logo-img"></a>
+            <a href="index.html" class="logo"><img src="logo.png" alt="NonnaPunk" class="logo-img"></a>
             <nav>
                 <a href="#menu">Tartas</a>
                 <a href="#merch">Merch</a>
                 <a href="#footer">Contacto</a>
+                <a href="#" onclick="toggleCart()" class="header-cart-link">
+                    🛒 <span id="headerCartCount" class="header-badge">0</span>
+                </a>
             </nav>
         </div>
     </header>
-
-    <button class="cart-button" onclick="toggleCart()">
-        🛒 <span class="cart-count" id="cartCount">0</span>
-    </button>
-
-    <div class="modal" id="cartModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="toggleCart()">×</button>
-            <h2>Tu Carrito Punk</h2>
-            <div id="cartItems"></div>
-            <div class="cart-total">Total: <span id="cartTotal">0.00€</span></div>
-            <button class="btn-cta" style="width: 100%;" onclick="proceedToCheckout()">Proceder al Pago</button>
-        </div>
-    </div>
-
-    <div class="modal" id="checkoutModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeCheckout()">×</button>
-            
-            <div id="checkoutContent">
-                <h2>Finalizar Pedido</h2>
-                <div id="orderSummary" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px;"></div>
-                
-                <form id="payment-form">
-                    <div class="form-group">
-                        <label>Nombre y Apellidos</label>
-                        <input type="text" id="customer-name" required placeholder="Tu nombre completo">
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="customer-email" required placeholder="tu@email.com">
-                        </div>
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="tel" id="customer-phone" required placeholder="+34...">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Fecha Recogida</label>
-                        <input type="date" id="pickup-date" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Alergias o mensaje para la cocina?</label>
-                        <textarea id="customer-notes" rows="2" placeholder="Ej: Sin nueces, poner 'Felicidades' en la caja..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Tarjeta de Crédito (Stripe Seguro)</label>
-                        <div id="card-element"></div>
-                        <div id="card-errors" role="alert"></div>
-                    </div>
-                    
-                    <button type="submit" id="submit-button" class="btn-cta" style="width: 100%;">
-                        <span id="button-text">PAGAR AHORA</span>
-                        <div id="spinner" class="spinner" style="display: none;"></div>
-                    </button>
-                    <p style="font-size: 0.8rem; color: #999; text-align: center; margin-top: 10px;">Pagos encriptados SSL.</p>
-                </form>
-            </div>
-            
-            <div id="success-message" style="display: none; text-align: center;">
-                <div style="font-size: 60px; margin-bottom: 20px;">🤘✅</div>
-                <h3>¡Pedido Confirmado!</h3>
-                <p>Referencia: <span id="order-number" style="font-weight:bold;"></span></p>
-                <p>Hemos enviado los detalles a: <br><strong id="confirm-email" style="color: var(--color-acento);"></strong></p>
-                <p style="margin-top: 20px; color: #666;">El horno ya está en marcha.</p>
-            </div>
-        </div>
-    </div>
 
     <section class="hero">
         <h1>Tradición Rebelde</h1>
@@ -302,7 +232,7 @@
         <a href="#menu" class="btn-cta">VER EL MENÚ</a>
     </section>
 
-    <div class="story-box" id="historia">
+    <div class="story-box">
         <h2>El Concepto</h2>
         <p>¿Qué pasa cuando mezclas el cuaderno de recetas de 1950 con los antojos modernos? Nace <strong>NonnaPunk</strong>. Horneamos cada mañana con huevos de granja y quesos cremosos, pero añadimos ingredientes que rompen las reglas. Sin conservantes, sin tonterías, solo sabor brutal.</p>
     </div>
@@ -312,100 +242,99 @@
         <div class="grid-productos">
             
             <article class="card-producto">
-                <a href="tarta-clasica.html"><img src="frutos.jpg" alt="Clásica" class="img-placeholder"></a>
+                <a href="tarta-clasica.html" class="card-link"><img src="frutos.jpg" alt="Clásica" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="tarta-clasica.html"><h3>La Clásica de la Nonna</h3></a>
+                    <a href="tarta-clasica.html" class="card-link"><h3>La Clásica de la Nonna</h3></a>
                     <p>Cremosa, suave y con coulis de frutos rojos silvestres.</p>
                     <span class="precio">25.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('La Clásica', 25)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('La Clásica', 25.00)">AÑADIR 🛒</button>
                 </div>
             </article>
 
             <article class="card-producto">
-                <a href="tarta-oreo.html"><img src="tartaoreo.jpg" alt="Oreo" class="img-placeholder"></a>
+                <a href="tarta-oreo.html" class="card-link"><img src="tartaoreo.jpg" alt="Oreo" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="tarta-oreo.html"><h3>Oreo White Noise</h3></a>
-                    <p>Base crujiente de galleta negra con chocolate blanco premium.</p>
+                    <a href="tarta-oreo.html" class="card-link"><h3>Oreo White Noise</h3></a>
+                    <p>Chocolate blanco y galleta negra. Adicción pura.</p>
                     <span class="precio">28.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Oreo White', 28)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Oreo White', 28.00)">AÑADIR 🛒</button>
                 </div>
             </article>
 
             <article class="card-producto">
-                <a href="tarta-pistacho.html"><img src="pistacho.png" alt="Pistacho" class="img-placeholder"></a>
+                <a href="tarta-pistacho.html" class="card-link"><img src="pistacho.png" alt="Pistacho" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="tarta-pistacho.html"><h3>Pistacho & Azafrán</h3></a>
-                    <p>Lujo comestible. Pistacho ibérico y hebras reales de azafrán.</p>
+                    <a href="tarta-pistacho.html" class="card-link"><h3>Pistacho & Azafrán</h3></a>
+                    <p>Lujo comestible. Pistacho ibérico y hebras de azafrán.</p>
                     <span class="precio">28.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Pistacho Luxury', 28)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Pistacho Lux', 28.00)">AÑADIR 🛒</button>
+                </div>
+            </article>
+
+             <article class="card-producto">
+                <a href="tarta-mango.html" class="card-link"><img src="mango.jpg" alt="Mango" class="img-placeholder"></a>
+                <div class="info-producto">
+                    <a href="tarta-mango.html" class="card-link"><h3>Mango & Chili Fire</h3></a>
+                    <p>Tropical y picante. Dulzura con final ardiente.</p>
+                    <span class="precio">28.00€</span>
+                    <button class="btn-add-cart" onclick="addToCart('Mango Fire', 28.00)">AÑADIR 🛒</button>
                 </div>
             </article>
 
             <article class="card-producto">
-                <a href="tarta-mango.html"><img src="mango.jpg" alt="Mango" class="img-placeholder"></a>
+                <a href="tarta-caramelo.html" class="card-link"><img src="caramelo.png" alt="Caramelo" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="tarta-mango.html"><h3>Mango & Chili Fire</h3></a>
-                    <p>Explosión tropical con un toque picante final.</p>
+                    <a href="tarta-caramelo.html" class="card-link"><h3>Salty Caramel Pretzel</h3></a>
+                    <p>Caos perfecto: pretzels, caramelo y toffee.</p>
                     <span class="precio">28.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Mango Fire', 28)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Salty Caramel', 28.00)">AÑADIR 🛒</button>
                 </div>
             </article>
 
             <article class="card-producto">
-                <a href="tarta-caramelo.html"><img src="caramelo.png" alt="Caramelo" class="img-placeholder"></a>
+                <a href="tarta-lotus.html" class="card-link"><img src="lotus.png" alt="Lotus" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="tarta-caramelo.html"><h3>Salty Caramel Pretzel</h3></a>
-                    <p>Base de pretzels, caramelo salado casero y toffee.</p>
+                    <a href="tarta-lotus.html" class="card-link"><h3>Lotus Overdose</h3></a>
+                    <p>Galleta Lotus en base y cobertura. Ilegal.</p>
                     <span class="precio">28.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Salty Caramel', 28)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Lotus Overdose', 28.00)">AÑADIR 🛒</button>
                 </div>
             </article>
-
-            <article class="card-producto">
-                <a href="tarta-lotus.html"><img src="lotus.png" alt="Lotus" class="img-placeholder"></a>
-                <div class="info-producto">
-                    <a href="tarta-lotus.html"><h3>Lotus Overdose</h3></a>
-                    <p>Base, relleno y cobertura de la galleta más adictiva.</p>
-                    <span class="precio">28.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Lotus Overdose', 28)">AÑADIR</button>
-                </div>
-            </article>
-
         </div>
     </section>
 
-    <section id="merch" class="section-container merch-section">
+    <section id="merch" class="section-container merch-bg">
         <h2 class="section-title">Viste la Revolución</h2>
         <p style="text-align: center; margin-bottom: 40px;">No solo comas como un punk, vístete como uno.</p>
-        
+
         <div class="grid-productos">
             <article class="card-producto">
-                <a href="camiseta-negra.html"><img src="camisetanegra.png" alt="Camiseta" class="img-placeholder"></a>
+                <a href="camiseta-negra.html" class="card-link"><img src="camisetanegra.png" alt="Camiseta" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="camiseta-negra.html"><h3>T-Shirt "Team Nonna"</h3></a>
-                    <p>Algodón 100% orgánico. Negro lavado. Corte Oversize.</p>
+                    <a href="camiseta-negra.html" class="card-link"><h3>T-Shirt "Team Nonna"</h3></a>
+                    <p>Negro lavado. Algodón orgánico. Oversize.</p>
                     <span class="precio">10.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Camiseta Team Nonna', 10)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Camiseta Punk', 10.00)">AÑADIR 🛒</button>
                 </div>
             </article>
 
             <article class="card-producto">
-                <a href="bolsa.html"><img src="bolsa.png" alt="Tote Bag" class="img-placeholder"></a>
+                <a href="bolsa.html" class="card-link"><img src="bolsa.png" alt="Bolsa" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="bolsa.html"><h3>Tote "Punk Carrier"</h3></a>
-                    <p>Resistente para llevar libros, vinilos o tartas.</p>
+                    <a href="bolsa.html" class="card-link"><h3>Tote "Punk Carrier"</h3></a>
+                    <p>Resistente para libros o tartas.</p>
                     <span class="precio">3.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Tote Bag Punk', 3)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Tote Bag', 3.00)">AÑADIR 🛒</button>
                 </div>
             </article>
 
             <article class="card-producto">
-                <a href="taza.html"><img src="taza.png" alt="Taza" class="img-placeholder"></a>
+                <a href="taza.html" class="card-link"><img src="taza.png" alt="Taza" class="img-placeholder"></a>
                 <div class="info-producto">
-                    <a href="taza.html"><h3>Mug "Breakfast Rebel"</h3></a>
-                    <p>Cerámica negra mate. Para café muy fuerte.</p>
+                    <a href="taza.html" class="card-link"><h3>Mug "Breakfast Rebel"</h3></a>
+                    <p>Cerámica robusta para café XL.</p>
                     <span class="precio">5.00€</span>
-                    <button class="btn-add-cart" onclick="addToCart('Mug Rebel', 5)">AÑADIR</button>
+                    <button class="btn-add-cart" onclick="addToCart('Mug Rebel', 5.00)">AÑADIR 🛒</button>
                 </div>
             </article>
         </div>
@@ -415,7 +344,7 @@
         <div class="footer-content">
             <div class="footer-col">
                 <h3>NonnaPunk</h3>
-                <p>Repostería artesanal con actitud en el corazón de Melilla. Rompiendo dietas desde 2025.</p>
+                <p>Repostería artesanal con actitud en el corazón de Toledo. Rompiendo dietas desde 2025.</p>
                 <div class="social-icons">
                     <a href="#" class="social-icon" aria-label="Instagram">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -431,7 +360,7 @@
             
             <div class="footer-col">
                 <h3>Contacto</h3>
-                <p>📍 Calle Rebelión, 12, Melilla</p>
+                <p>📍 Calle Rebelión, 12, Toledo</p>
                 <p>📞 +34 600 000 000</p>
                 <p>📧 hola@nonnapunk.com</p>
                 <p>⏰ Mar-Dom: 10:00 - 20:00</p>
@@ -439,10 +368,10 @@
 
             <div class="footer-col">
                 <h3>Legal & Ayuda</h3>
-                <a href="#">Aviso Legal</a>
-                <a href="#">Política de Privacidad</a>
-                <a href="#">Alérgenos</a>
-                <a href="#">Envíos y Devoluciones</a>
+                <a href="legal.html#aviso-legal">Aviso Legal</a>
+                <a href="legal.html#privacidad">Política de Privacidad</a>
+                <a href="legal.html#cookies">Política de Cookies</a>
+                <a href="legal.html#envios">Envíos y Devoluciones</a>
             </div>
         </div>
         
@@ -451,31 +380,142 @@
         </div>
     </footer>
 
+    <div id="cookie-banner" style="position: fixed; bottom: -100%; left: 0; width: 100%; background: #2C2C2C; color: white; padding: 20px; text-align: center; z-index: 9999; transition: bottom 0.5s; box-shadow: 0 -5px 20px rgba(0,0,0,0.2);">
+        <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px;">
+            <p style="margin: 0; font-size: 0.9rem;">
+                🍪 <strong>Usamos cookies</strong> (propias y de Stripe) para que puedas comprar tartas sin que explote la web. 
+                Si sigues aquí, asumimos que te parece bien. 
+                <a href="legal.html#cookies" style="color: #ECCC68; text-decoration: underline;">Ver Política</a>.
+            </p>
+            <button onclick="acceptCookies()" style="background: #FF4757; color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: bold;">ACEPTAR</button>
+        </div>
+    </div>
+
+    <div id="cart-float" onclick="toggleCart()">
+        🛒 <span id="cartCount">0</span>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="toggleCart()">×</button>
+            <h2>Tu Pedido Punk</h2>
+            <div id="cartItems" style="margin: 20px 0;"></div>
+            <div class="cart-total">Total: <span id="cartTotal">0.00€</span></div>
+            <button class="btn-checkout-confirm" onclick="goToCheckout()">
+                IR A PAGAR
+            </button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeCheckout()">×</button>
+            <h2>Pago Seguro</h2>
+            <div id="checkoutContent">
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Powered by <strong>Stripe</strong></p>
+                <div id="orderSummary" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px;"></div>
+                
+                <form id="payment-form">
+                    <div class="form-group"><label>Nombre Completo</label><input type="text" id="customer-name" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="customer-email" required placeholder="tu@email.com"></div>
+                    <div class="form-group"><label>Teléfono</label><input type="tel" id="customer-phone" required></div>
+                    <div class="form-group"><label>Fecha Recogida</label><input type="date" id="pickup-date" required></div>
+                    
+                    <div class="form-group">
+                        <label>Notas / Alergias (Opcional)</label>
+                        <textarea id="customer-notes" rows="2" placeholder="Ej: Sin nueces, poner felicitación..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tarjeta de Crédito</label>
+                        <div id="card-element"></div>
+                        <div id="card-errors" style="color:red; margin-top:5px; font-size:0.9rem;"></div>
+                    </div>
+
+                    <button type="submit" id="submit-button" class="btn-checkout-confirm">
+                        <span id="button-text">PAGAR AHORA</span>
+                        <div id="spinner" class="spinner" style="display: none;"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div id="success-message" style="display:none; text-align: center;">
+                <div style="font-size: 60px; margin-bottom: 20px;">🤘✅</div>
+                <h3>¡Pedido Confirmado!</h3>
+                <p>Referencia: <strong id="order-number"></strong></p>
+                <p>Te hemos enviado un email a: <br><strong id="confirm-email" style="color:var(--color-acento)"></strong></p>
+                <p style="margin-top: 20px; color:#666;">¡Nos vemos en la recogida!</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // CONFIGURACIÓN (Rellena esto)
+        // ==========================================
+        // ⚠️ ZONA DE CONFIGURACIÓN
+        // ==========================================
         const CONFIG = {
-            // Pon aquí tu clave pública de Stripe (empieza por pk_test_...)
+            // Pon aquí tu clave pública de Stripe (pk_test_...)
             STRIPE_KEY: 'pk_test_51SqafBPfC2lL6XQld47q2pIqeZNRTVo2AH7OPDhOwn67Wb5rRH4iejHkTtbfflnmmVwLUJvfJyp9OXaXwqAIfnB200I6jqATf3', 
-            // Pon aquí tu URL de Zapier Webhook
+            // Pon aquí tu URL de Zapier
             ZAPIER_URL: 'https://hooks.zapier.com/hooks/catch/25982070/ugpz72v/' 
         };
 
-        // --- LÓGICA DEL CARRITO ---
+        // --- 1. GESTIÓN DEL CARRITO ---
         let cart = JSON.parse(localStorage.getItem('nonnaCart_v2')) || [];
 
-        // Función global para añadir
-        window.addToCart = function(name, price) {
-            console.log("Intentando añadir:", name, price); 
+        function updateCartUI() {
+            // Guardar
+            localStorage.setItem('nonnaCart_v2', JSON.stringify(cart));
             
-            const existing = cart.find(item => item.name === name);
-            if(existing) {
-                existing.qty++;
-            } else {
-                cart.push({ name: name, price: price, qty: 1 });
+            // Totales
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            // Actualizar contadores (Header + Flotante)
+            const floatBadge = document.getElementById('cartCount');
+            const headerBadge = document.getElementById('headerCartCount');
+            
+            if(floatBadge) floatBadge.innerText = totalQty;
+            if(headerBadge) {
+                headerBadge.innerText = totalQty;
+                headerBadge.classList.remove('bump');
+                void headerBadge.offsetWidth; // Trigger reflow
+                headerBadge.classList.add('bump');
             }
-            
+
+            // Renderizar Lista
+            const list = document.getElementById('cartItems');
+            if(list) {
+                list.innerHTML = '';
+                if(cart.length === 0) {
+                    list.innerHTML = '<p style="text-align:center; color:#999; padding:20px;">Tu carrito está vacío 😢</p>';
+                } else {
+                    cart.forEach((item, idx) => {
+                        list.innerHTML += `
+                            <div class="cart-item">
+                                <div><strong>${item.name}</strong><br><small>${item.qty} x ${item.price}€</small></div>
+                                <div>
+                                    <strong>${(item.price * item.qty).toFixed(2)}€</strong>
+                                    <button class="btn-remove" onclick="removeFromCart(${idx})">×</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                const totalEl = document.getElementById('cartTotal');
+                if(totalEl) totalEl.innerText = totalPrice.toFixed(2) + '€';
+            }
+        }
+
+        window.addToCart = function(name, price) {
+            const existing = cart.find(item => item.name === name);
+            if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1 }); }
             updateCartUI();
-            showNotification(`✅ ${name} añadido`);
+            
+            // Animación visual carrito flotante
+            const btn = document.getElementById('cart-float');
+            btn.style.transform = "scale(1.2)";
+            setTimeout(() => btn.style.transform = "scale(1)", 200);
         };
 
         window.removeFromCart = function(index) {
@@ -483,161 +523,111 @@
             updateCartUI();
         };
 
-        function updateCartUI() {
-            // Guardar
-            localStorage.setItem('nonnaCart_v2', JSON.stringify(cart));
-            
-            // Actualizar contador
-            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById('cartCount').innerText = totalQty;
-
-            // Actualizar lista visual
-            const list = document.getElementById('cartItems');
-            list.innerHTML = '';
-            let total = 0;
-
-            if(cart.length === 0) {
-                list.innerHTML = '<p style="color:#999; text-align:center;">Carrito vacío 😢</p>';
-            } else {
-                cart.forEach((item, idx) => {
-                    total += item.price * item.qty;
-                    list.innerHTML += `
-                        <div class="cart-item">
-                            <div>
-                                <strong>${item.name}</strong><br>
-                                <small>${item.qty} x ${item.price}€</small>
-                            </div>
-                            <div>
-                                <strong>${(item.price * item.qty).toFixed(2)}€</strong>
-                                <button class="btn-remove" onclick="removeFromCart(${idx})">×</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            document.getElementById('cartTotal').innerText = total.toFixed(2) + '€';
-        }
-
-        // Inicializar carrito al cargar
-        updateCartUI();
-
-        // --- NOTIFICACIONES ---
-        function showNotification(msg) {
-            const div = document.createElement('div');
-            div.innerText = msg;
-            div.style.cssText = "position:fixed; top:20px; right:20px; background:#25D366; color:white; padding:15px; border-radius:10px; z-index:9999; font-weight:bold; box-shadow:0 5px 15px rgba(0,0,0,0.2);";
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 2000);
-        }
-
-        // --- MODALES ---
+        // --- 2. MODALES ---
         window.toggleCart = function() {
-            document.getElementById('cartModal').classList.toggle('active');
-        };
-
-        window.proceedToCheckout = function() {
-            if(cart.length === 0) return alert("¡El carrito está vacío!");
-            toggleCart(); // Cierra carrito
-            document.getElementById('checkoutModal').classList.add('active');
-            
-            // Resumen en checkout
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            document.getElementById('orderSummary').innerHTML = `<strong>Total a pagar: ${total.toFixed(2)}€</strong>`;
-            document.getElementById('button-text').innerText = `PAGAR ${total.toFixed(2)}€`;
-
-            // Establecer fecha mínima (mañana)
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            document.getElementById('pickup-date').min = tomorrow.toISOString().split('T')[0];
-
-            // Inicializar Stripe si no está listo
-            initStripe();
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('active');
         };
 
         window.closeCheckout = function() {
             document.getElementById('checkoutModal').classList.remove('active');
         };
 
-        // --- STRIPE & ZAPIER ---
+        window.goToCheckout = function() {
+            if(cart.length === 0) return alert("¡Añade algo primero!");
+            toggleCart(); // Cierra carrito
+            document.getElementById('checkoutModal').classList.add('active');
+            
+            // Resumen
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('orderSummary').innerHTML = `<strong>Total a Pagar: ${total.toFixed(2)}€</strong>`;
+            document.getElementById('button-text').innerText = `PAGAR ${total.toFixed(2)}€`;
+            
+            // Fecha mínima mañana
+            const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+            document.getElementById('pickup-date').min = tmr.toISOString().split('T')[0];
+
+            initStripe();
+        };
+
+        // --- 3. STRIPE Y PAGO ---
         let stripe, elements, card;
 
         function initStripe() {
-            if(stripe) return; // Ya inicializado
-            
-            if(CONFIG.STRIPE_KEY.includes('TU_CLAVE')) {
-                console.warn("⚠️ FALTA LA CLAVE DE STRIPE EN CONFIG");
-            }
-
+            if(stripe) return;
             try {
                 stripe = Stripe(CONFIG.STRIPE_KEY);
                 elements = stripe.elements();
                 card = elements.create('card', {
-                    style: { base: { fontSize: '16px', fontFamily: 'Montserrat, sans-serif' } }
+                    style: { base: { fontSize: '16px', fontFamily: 'Montserrat', color: '#32325d' } }
                 });
                 card.mount('#card-element');
-                
                 card.on('change', ({error}) => {
                     document.getElementById('card-errors').textContent = error ? error.message : '';
                 });
-            } catch(e) {
-                console.error("Error iniciando Stripe:", e);
-            }
+            } catch(e) { console.error(e); }
         }
 
         document.getElementById('payment-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const btn = document.getElementById('submit-button');
             const spinner = document.getElementById('spinner');
             const txt = document.getElementById('button-text');
             
-            btn.disabled = true;
-            txt.style.display = 'none';
-            spinner.style.display = 'inline-block';
+            btn.disabled = true; txt.style.display = 'none'; spinner.style.display = 'inline-block';
 
-            // Recoger datos (Incluida la nota de alergias)
             const data = {
                 nombre: document.getElementById('customer-name').value,
                 email: document.getElementById('customer-email').value,
                 telefono: document.getElementById('customer-phone').value,
                 fecha: document.getElementById('pickup-date').value,
-                notas: document.getElementById('customer-notes').value, // <--- NUEVO CAMPO
+                notas: document.getElementById('customer-notes').value,
                 carrito: cart,
                 total: document.getElementById('cartTotal').innerText
             };
 
             try {
-                // 1. Validar tarjeta con Stripe
                 const {token, error} = await stripe.createToken(card);
                 if(error) throw new Error(error.message);
 
-                // 2. Enviar a Zapier (Webhook)
                 await fetch(CONFIG.ZAPIER_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
+                    method: 'POST', mode: 'no-cors',
+                    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
                 });
 
-                // 3. Éxito visual
-                await new Promise(r => setTimeout(r, 1500)); 
+                // Simular éxito
+                await new Promise(r => setTimeout(r, 1500));
                 
                 document.getElementById('checkoutContent').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
                 document.getElementById('order-number').innerText = "NP-" + Math.floor(Math.random()*10000);
                 document.getElementById('confirm-email').innerText = data.email;
-
-                // Vaciar carro
-                cart = [];
-                updateCartUI();
+                
+                cart = []; updateCartUI();
 
             } catch(err) {
                 alert("Error: " + err.message);
-                btn.disabled = false;
-                txt.style.display = 'inline';
-                spinner.style.display = 'none';
+                btn.disabled = false; txt.style.display = 'inline'; spinner.style.display = 'none';
             }
         });
+
+        // --- 4. COOKIES ---
+        window.addEventListener('load', () => {
+            updateCartUI();
+            if (!localStorage.getItem('cookiesAccepted')) {
+                setTimeout(() => document.getElementById('cookie-banner').style.bottom = '0', 1000);
+            }
+        });
+
+        window.acceptCookies = function() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookie-banner').style.bottom = '-100%';
+        };
+
+        // Cerrar si click fuera
+        window.onclick = function(e) {
+            if (e.target.classList.contains('modal')) e.target.classList.remove('active');
+        }
     </script>
 </body>
 </html>
